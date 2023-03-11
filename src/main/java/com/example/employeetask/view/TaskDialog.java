@@ -7,6 +7,7 @@ import com.example.employeetask.service.TaskService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 import static com.example.employeetask.view.Menu.SCANNER;
@@ -43,11 +44,25 @@ public class TaskDialog {
     }
 
     private State readAnTask(State next) {
-        return null;
+        System.out.println("Enter task id you want to see:");
+        String input = readLn();
+        Task task = findTaskById(input);
+        if (task != null) {
+            tableHeader();
+            System.out.println(task);
+        }
+        return next;
     }
 
     private State readAllTasks(State next) {
-        return null;
+        List<Task> tasks = taskService.getAll();
+        if (tasks.size() > 0) {
+            tableHeader();
+            tasks.forEach(System.out::println);
+        } else {
+            System.out.println("There is no employees in the system.");
+        }
+        return next;
     }
 
     private State createNewTask(State next) {
@@ -90,5 +105,25 @@ public class TaskDialog {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         LocalDate date = LocalDate.parse(input, formatter);
         task.setDueDate(date);
+    }
+
+    private static void tableHeader() {
+        System.out.printf("| %-10s | %-15s | %-15s | %-10s | %-54s |%n",
+                          "id", "title", "dueDate", "assignee", "description");
+        System.out.println("_".repeat(120));
+    }
+
+    private Task findTaskById(String input) {
+        Task task = null;
+        try {
+            long id = Integer.parseInt(input);
+            Optional<Task> byId = Optional.of(taskService.findById(id).orElseThrow());
+            task = byId.get();
+        } catch (NumberFormatException e) {
+            System.out.println("Please, enter a valid number.");
+        } catch (Exception e) {
+            System.out.println("Task with id \"" + input + "\" does not exists.");
+        }
+        return task;
     }
 }

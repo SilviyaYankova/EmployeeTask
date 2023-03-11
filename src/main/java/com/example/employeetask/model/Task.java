@@ -30,12 +30,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", Task.class.getSimpleName() + "[", "]")
-                .add("id=" + id)
-                .add("title='" + title + "'")
-                .add("description='" + description + "'")
-                .add("employee=" + assignee)
-                .add("dueDate=" + dueDate)
-                .toString();
+        return String.format("| %-10s | %-15s | %-15s | %-10s | %-54s |",
+                             id, title, dueDate, assignee.getId(), description);
     }
 }
