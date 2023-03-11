@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.employeetask.model.StatusEnum.*;
 import static com.example.employeetask.view.Menu.SCANNER;
 
 public class TaskDialog {
@@ -20,6 +21,7 @@ public class TaskDialog {
     private TaskService taskService;
     private StatusService statusService;
     private Task task;
+    private Status status;
 
     public TaskDialog(EmployeeService employeeService, TaskService taskService, StatusService statusService) {
         this.employeeService = employeeService;
@@ -45,13 +47,41 @@ public class TaskDialog {
             new MenuItem(2, "Description", () -> this.updateTaskDescription(() -> this.updateTaskMenu)),
             new MenuItem(3, "Assignee", () -> this.updateTaskAssignee(() -> this.updateTaskMenu)),
             new MenuItem(4, "Due date", () -> this.updateTaskDueDate(() -> this.updateTaskMenu)),
-            new MenuItem(5, "Status", () -> this.updateTaskStatus(() -> this.updateTaskMenu)),
+            new MenuItem(5, "Status", () -> this.updateTaskStatus(() -> this.updateStatusMenu)),
             new MenuItem(6, "Save", () -> this.saveUpdatedTask(() -> this.taskMenu)),
             new MenuItem(0, "Cancel", () -> taskMenu)
     );
 
-    private State updateTaskStatus(State next) {
-        return null;
+    Menu updateStatusMenu = new Menu(
+            new MenuItem(1, "Todo", () -> this.todoStatus(() -> this.updateTaskMenu)),
+            new MenuItem(2, "In progress", () -> this.inProgressStatus(() -> this.updateTaskMenu)),
+            new MenuItem(3, "Review", () -> this.reviewStatus(() -> this.updateTaskMenu)),
+            new MenuItem(4, "Done", () -> this.doneStatus(() -> this.updateTaskMenu)),
+            new MenuItem(0, "Cancel", () -> taskMenu)
+    );
+
+    private State doneStatus(State next) {
+        status.setStatus(DONE);
+        System.out.println("Task's status updated to \"Done\"");
+        return next;
+    }
+
+    private State reviewStatus(State next) {
+        status.setStatus(REVIEW);
+        System.out.println("Task's status updated to \"Review\"");
+        return next;
+    }
+
+    private State inProgressStatus(State next) {
+        status.setStatus(IN_PROGRESS);
+        System.out.println("Task's status updated to \"In progress\"");
+        return next;
+    }
+
+    private State todoStatus(State next) {
+        status.setStatus(TODO);
+        System.out.println("Task's status updated to \"Todo\"");
+        return next;
     }
 
     private State deleteTask(State next) {
@@ -63,6 +93,11 @@ public class TaskDialog {
             taskService.deleteTask(task);
             System.out.println("Task with id \"" + id + "\" successfully deleted.");
         }
+        return next;
+    }
+
+    private State updateTaskStatus(State next) {
+        System.out.println("Update task's status from \"" + status.getStatus() + "\" to:");
         return next;
     }
 
@@ -110,6 +145,7 @@ public class TaskDialog {
 
     private State saveUpdatedTask(State next) {
         taskService.updateTask(task);
+        statusService.update(status);
         return next;
     }
 
@@ -138,7 +174,6 @@ public class TaskDialog {
 
     private State readAllTasks(State next) {
         List<Status> tasks = statusService.getAll();
-//        List<Task> tasks = taskService.getAll();
         if (tasks.size() > 0) {
             tableHeader();
             tasks.forEach(System.out::println);
@@ -173,7 +208,7 @@ public class TaskDialog {
         }
 
         taskService.createTask(task);
-        Status status = new Status(task, StatusEnum.TODO);
+        Status status = new Status(task, TODO);
         statusService.createStatus(status);
         return next;
     }
@@ -205,12 +240,27 @@ public class TaskDialog {
             long id = Integer.parseInt(input);
             Optional<Task> byId = Optional.of(taskService.findById(id).orElseThrow());
             task = byId.get();
+            status = statusService.findById(id).get();
         } catch (NumberFormatException e) {
             System.out.println("Please, enter a valid number.");
         } catch (Exception e) {
             System.out.println("Task with id \"" + input + "\" does not exists.");
         }
         return task;
+    }
+
+    private Status findStatusById(String input) {
+        Status status = null;
+        try {
+            long id = Integer.parseInt(input);
+            Optional<Status> byId = Optional.of(statusService.findById(id).orElseThrow());
+            status = byId.get();
+        } catch (NumberFormatException e) {
+            System.out.println("Please, enter a valid number.");
+        } catch (Exception e) {
+            System.out.println("Task with id \"" + input + "\" does not exists.");
+        }
+        return status;
     }
 
     private static void tableHeader() {
