@@ -1,8 +1,9 @@
 package com.example.employeetask.view;
 
-
 import com.example.employeetask.model.Employee;
 import com.example.employeetask.service.EmployeeService;
+import com.example.employeetask.service.TaskService;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,26 +15,29 @@ import java.util.regex.Pattern;
 
 import static com.example.employeetask.view.Menu.SCANNER;
 
-
+@Component
 public class EmployeeDialog {
-    private final EmployeeService employeeService;
+    private EmployeeService employeeService;
+    private TaskService taskService;
     private Employee employee;
 
-    public EmployeeDialog(EmployeeService employeeService) {
+    public EmployeeDialog(EmployeeService employeeService, TaskService taskService) {
         this.employeeService = employeeService;
+        this.taskService = taskService;
     }
 
     private String readLn() {
         return SCANNER.nextLine();
     }
 
-    Menu employeeMenu = new Menu(
+
+    public Menu employeeMenu = new Menu(
             new MenuItem(1, "Create employee", () -> this.createNewEmployee(() -> this.employeeMenu)),
-            new MenuItem(2, "Read all employees", () -> this.readAllEmployee(() -> this.employeeMenu)),
+            new MenuItem(2, "Read all employees", () -> this.readAllEmployees(() -> this.employeeMenu)),
             new MenuItem(3, "Read an employee", () -> this.readAnEmployee(() -> this.employeeMenu)),
             new MenuItem(4, "Update employee", () -> this.updateEmployee(() -> this.employeeMenu)),
             new MenuItem(5, "Delete employee", () -> this.deleteEmployee(() -> this.employeeMenu)),
-            new MenuItem(0, "Back", new Dialog(null).mainMenu)
+            new MenuItem(0, "Back", () -> new Dialog(employeeService, taskService).getMainMenu())
     );
 
     Menu updateEmployeeMenu = new Menu(
@@ -126,7 +130,7 @@ public class EmployeeDialog {
         return next;
     }
 
-    private State readAllEmployee(State next) {
+    private State readAllEmployees(State next) {
         List<Employee> employees = employeeService.getAll();
         if (employees.size() > 0) {
             tableHeader();

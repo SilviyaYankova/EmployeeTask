@@ -1,13 +1,17 @@
 package com.example.employeetask.view;
 
-
 import com.example.employeetask.service.EmployeeService;
+import com.example.employeetask.service.TaskService;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Dialog {
     private EmployeeService employeeService;
+    private TaskService taskService;
 
-    public Dialog(EmployeeService employeeService) {
+    public Dialog(EmployeeService employeeService, TaskService taskService) {
         this.employeeService = employeeService;
+        this.taskService = taskService;
     }
 
     public void run() {
@@ -18,12 +22,11 @@ public class Dialog {
     }
 
     Menu mainMenu = new Menu(
-            new MenuItem(1, "Employee", () -> new EmployeeDialog(employeeService).employeeMenu),
-            new MenuItem(2, "Task", () -> this.taskMenu)
-
+            new MenuItem(1, "Employee", () -> new EmployeeDialog(employeeService, taskService).employeeMenu),
+            new MenuItem(2, "Task", () -> new TaskDialog(employeeService, taskService).taskMenu)
     );
 
-    Menu taskMenu = new Menu(
-            new MenuItem(0, "Back", mainMenu)
-    );
+    public Menu getMainMenu() {
+        return mainMenu;
+    }
 }
