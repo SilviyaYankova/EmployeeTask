@@ -5,6 +5,7 @@ import com.example.employeetask.repository.EmployeeRepository;
 import com.example.employeetask.service.EmployeeService;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,5 +45,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public long employeesCount() {
        return employeeRepository.count();
+    }
+
+    @Override
+    public List<Employee> findBySalaryInRange(BigDecimal min, BigDecimal max) {
+        return employeeRepository.findAllBySalaryBetween(min, max);
     }
 }

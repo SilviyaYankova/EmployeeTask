@@ -2,6 +2,7 @@ package com.example.employeetask.service;
 
 import com.example.employeetask.model.Employee;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,4 +19,6 @@ public interface EmployeeService {
     Optional<Employee> findById(long id);
 
     long employeesCount();
+
+    List<Employee> findBySalaryInRange(BigDecimal min, BigDecimal max);
 }

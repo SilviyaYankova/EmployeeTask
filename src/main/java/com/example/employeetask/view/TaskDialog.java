@@ -2,7 +2,6 @@ package com.example.employeetask.view;
 
 import com.example.employeetask.model.Employee;
 import com.example.employeetask.model.Status;
-import com.example.employeetask.model.StatusEnum;
 import com.example.employeetask.model.Task;
 import com.example.employeetask.service.EmployeeService;
 import com.example.employeetask.service.StatusService;
@@ -60,6 +59,18 @@ public class TaskDialog {
             new MenuItem(0, "Cancel", () -> taskMenu)
     );
 
+    private State deleteTask(State next) {
+        System.out.println("Enter task id you want to delete:");
+        String input = readLn();
+        Task task = findTaskById(input);
+        if (task != null) {
+            Long id = task.getId();
+            taskService.deleteTask(task);
+            System.out.println("Task with id \"" + id + "\" successfully deleted.");
+        }
+        return next;
+    }
+
     private State doneStatus(State next) {
         status.setStatus(DONE);
         System.out.println("Task's status updated to \"Done\"");
@@ -81,18 +92,6 @@ public class TaskDialog {
     private State todoStatus(State next) {
         status.setStatus(TODO);
         System.out.println("Task's status updated to \"Todo\"");
-        return next;
-    }
-
-    private State deleteTask(State next) {
-        System.out.println("Enter task id you want to delete:");
-        String input = readLn();
-        Task task = findTaskById(input);
-        if (task != null) {
-            Long id = task.getId();
-            taskService.deleteTask(task);
-            System.out.println("Task with id \"" + id + "\" successfully deleted.");
-        }
         return next;
     }
 
@@ -249,23 +248,9 @@ public class TaskDialog {
         return task;
     }
 
-    private Status findStatusById(String input) {
-        Status status = null;
-        try {
-            long id = Integer.parseInt(input);
-            Optional<Status> byId = Optional.of(statusService.findById(id).orElseThrow());
-            status = byId.get();
-        } catch (NumberFormatException e) {
-            System.out.println("Please, enter a valid number.");
-        } catch (Exception e) {
-            System.out.println("Task with id \"" + input + "\" does not exists.");
-        }
-        return status;
-    }
-
     private static void tableHeader() {
-        System.out.printf("| %-10s | %-15s | %-15s | %-10s | %-54s | %-10s |%n",
+        System.out.printf("| %-10s | %-15s | %-15s | %-10s | %-54s | %-12s |%n",
                           "Id", "Title", "Due Date", "Assignee", "Description", "Status");
-        System.out.println("_".repeat(133));
+        System.out.println("_".repeat(135));
     }
 }

@@ -1,11 +1,12 @@
 package com.example.employeetask.service.impl;
 
 import com.example.employeetask.model.Status;
-import com.example.employeetask.model.Task;
+import com.example.employeetask.model.StatusEnum;
 import com.example.employeetask.repository.StatusRepository;
 import com.example.employeetask.service.StatusService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +36,16 @@ public class StatusServiceImpl implements StatusService {
     @Override
     public void update(Status status) {
         statusRepository.save(status);
+    }
+
+    @Override
+    public List<Status> findByDueDate(LocalDate date) {
+        return statusRepository.findAllByTask_DueDate(date);
+    }
+
+    @Override
+    public List<Status> findByStatus(StatusEnum status) {
+        return statusRepository.findAllByStatus(status);
     }
 
 }

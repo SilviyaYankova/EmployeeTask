@@ -54,4 +54,9 @@ public class TaskServiceImpl implements TaskService {
         }
         return map;
     }
+
+    @Override
+    public Long tasksCount() {
+        return taskRepository.count();
+    }
 }

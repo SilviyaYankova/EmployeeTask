@@ -20,4 +20,6 @@ public interface TaskService {
     Optional<Task> findById(long id);
 
     Map<Employee, Long> topFiveEmployeesCount();
+
+    Long tasksCount();
 }
