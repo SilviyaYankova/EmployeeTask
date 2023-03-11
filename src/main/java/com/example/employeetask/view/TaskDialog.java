@@ -3,9 +3,7 @@ package com.example.employeetask.view;
 import com.example.employeetask.model.Task;
 import com.example.employeetask.service.EmployeeService;
 import com.example.employeetask.service.TaskService;
-import org.springframework.stereotype.Component;
 
-@Component
 public class TaskDialog {
     private EmployeeService employeeService;
     private TaskService taskService;

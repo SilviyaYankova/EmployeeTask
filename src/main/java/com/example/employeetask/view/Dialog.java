@@ -2,9 +2,7 @@ package com.example.employeetask.view;
 
 import com.example.employeetask.service.EmployeeService;
 import com.example.employeetask.service.TaskService;
-import org.springframework.stereotype.Component;
 
-@Component
 public class Dialog {
     private EmployeeService employeeService;
     private TaskService taskService;

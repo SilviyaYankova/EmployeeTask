@@ -3,7 +3,6 @@ package com.example.employeetask.view;
 import com.example.employeetask.model.Employee;
 import com.example.employeetask.service.EmployeeService;
 import com.example.employeetask.service.TaskService;
-import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -15,7 +14,6 @@ import java.util.regex.Pattern;
 
 import static com.example.employeetask.view.Menu.SCANNER;
 
-@Component
 public class EmployeeDialog {
     private EmployeeService employeeService;
     private TaskService taskService;
@@ -71,20 +69,23 @@ public class EmployeeDialog {
     }
 
     private State updateEmployeeDateOfBirth(State next) {
-        System.out.println("Update employee's date of birth from \"" + employee.getDateOfBirth() + "\" to:");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         LocalDate oldDateOfBirth = employee.getDateOfBirth();
+        System.out.println("Update employee's date of birth from \"" + dateTimeFormatter.format(oldDateOfBirth) + "\" to:");
         setEmployeeDateOfBirth(employee);
-        System.out.println("Old date of birth: " + oldDateOfBirth);
-        System.out.println("New date of birth: " + employee.getDateOfBirth());
+        System.out.println("Old date of birth: " + dateTimeFormatter.format(oldDateOfBirth));
+        System.out.println("New date of birth: " + dateTimeFormatter.format(employee.getDateOfBirth()));
         return next;
     }
 
     private State updateEmployeePhoneNumber(State next) {
         System.out.println("Update employee's phone number from \"" + employee.getPhoneNumber() + "\" to:");
-        String phoneNumber = readLn();
-        System.out.println("Old phone number: " + employee.getPhoneNumber());
-        employee.setPhoneNumber(phoneNumber);
-        System.out.println("New phone number: " + employee.getPhoneNumber());
+        String oldPhoneNumber = employee.getPhoneNumber();
+        setPhoneNumber(employee);
+        if (!oldPhoneNumber.equals(employee.getPhoneNumber())) {
+            System.out.println("Old phone number: " + oldPhoneNumber);
+            System.out.println("New phone number: " + employee.getPhoneNumber());
+        }
         return next;
     }
 
@@ -157,12 +158,7 @@ public class EmployeeDialog {
 
         while (employee.getPhoneNumber() == null) {
             System.out.println("Enter phone number:");
-            String phoneNumber = readLn();
-            if (phoneNumber.length() < 8 || phoneNumber.length() > 10) {
-                System.out.println("Error: PhoneNumber should be between 8 and 10 characters long.");
-            } else {
-                employee.setPhoneNumber(phoneNumber);
-            }
+            setPhoneNumber(employee);
         }
 
         while (employee.getDateOfBirth() == null) {
@@ -176,6 +172,15 @@ public class EmployeeDialog {
 
         employeeService.createEmployee(employee);
         return next;
+    }
+
+    private void setPhoneNumber(Employee employee) {
+        String phoneNumber = readLn();
+        if (phoneNumber.length() < 8 || phoneNumber.length() > 10) {
+            System.out.println("Error: PhoneNumber should be between 8 and 10 characters long.");
+        } else {
+            employee.setPhoneNumber(phoneNumber);
+        }
     }
 
     private void setEmployeeDateOfBirth(Employee employee) {
