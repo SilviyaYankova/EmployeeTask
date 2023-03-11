@@ -4,6 +4,7 @@ import com.example.employeetask.model.Employee;
 import com.example.employeetask.model.Task;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface TaskService {
@@ -18,5 +19,5 @@ public interface TaskService {
 
     Optional<Task> findById(long id);
 
-    List<Employee> getTopFiveEmployees();
+    Map<Employee, Long> topFiveEmployeesCount();
 }

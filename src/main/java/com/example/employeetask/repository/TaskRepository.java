@@ -17,4 +17,11 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             """)
     List<Employee> findTopFiveEmployees();
 
+    @Query("""
+            SELECT count(*) FROM Task as t
+            GROUP BY t.assignee
+            ORDER BY count(*) desc
+            LIMIT 5
+            """)
+    List<Long> findTopFiveEmployeesCount();
 }

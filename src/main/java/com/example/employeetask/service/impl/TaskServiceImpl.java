@@ -6,7 +6,9 @@ import com.example.employeetask.repository.TaskRepository;
 import com.example.employeetask.service.TaskService;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -43,7 +45,13 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Employee> getTopFiveEmployees() {
-        return taskRepository.findTopFiveEmployees();
+    public Map<Employee, Long> topFiveEmployeesCount() {
+        Map<Employee, Long> map = new LinkedHashMap<>();
+        List<Employee> employees = taskRepository.findTopFiveEmployees();
+        List<Long> tasksCount = taskRepository.findTopFiveEmployeesCount();
+        for (int i = 0; i < employees.size(); i++) {
+            map.put(employees.get(i), tasksCount.get(i));
+        }
+        return map;
     }
 }

@@ -4,7 +4,7 @@ import com.example.employeetask.model.Employee;
 import com.example.employeetask.service.EmployeeService;
 import com.example.employeetask.service.TaskService;
 
-import java.util.List;
+import java.util.Map;
 
 import static com.example.employeetask.view.Menu.SCANNER;
 
@@ -27,15 +27,22 @@ public class StatisticsDialog {
     );
 
     private State topFiveEmployees(State next) {
-        List<Employee> topFive = taskService.getTopFiveEmployees();
+        Map<Employee, Long> map = taskService.topFiveEmployeesCount();
         tableHeader();
-        topFive.forEach(System.out::println);
+        for (Map.Entry<Employee, Long> entry : map.entrySet()) {
+            Employee employee = entry.getKey();
+            Long count = entry.getValue();
+            System.out.printf("| %-10s | %-20s | %-20s | %-15s | %-15s | %-10s | %-10s |%n",
+                              employee.getId(), employee.getFullName(), employee.getEmail(),
+                              employee.getPhoneNumber(), employee.getDateOfBirth(),
+                              employee.getSalary(), count);
+        }
         return next;
     }
 
     private static void tableHeader() {
-        System.out.printf("| %-10s | %-20s | %-20s | %-15s | %-15s | %-10s |%n",
-                          "Id", "Ful lName", "Email", "Phone Number", "Date Of Birth", "Salary");
-        System.out.println("_".repeat(109));
+        System.out.printf("| %-10s | %-20s | %-20s | %-15s | %-15s | %-10s | %-10s |%n",
+                          "Id", "Ful lName", "Email", "Phone Number", "Date Of Birth", "Salary", "Count");
+        System.out.println("_".repeat(122));
     }
 }
