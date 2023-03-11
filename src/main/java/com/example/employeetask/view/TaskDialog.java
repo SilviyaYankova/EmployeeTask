@@ -45,7 +45,15 @@ public class TaskDialog {
     );
 
     private State deleteTask(State next) {
-        return null;
+        System.out.println("Enter task id you want to delete:");
+        String input = readLn();
+        Task task = findTaskById(input);
+        if (task != null) {
+            Long id = task.getId();
+            taskService.deleteTask(task);
+            System.out.println("Task with id \"" + id + "\" successfully deleted.");
+        }
+        return next;
     }
 
     private State updateTaskDueDate(State next) {

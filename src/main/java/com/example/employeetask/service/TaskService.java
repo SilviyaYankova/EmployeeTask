@@ -1,5 +1,6 @@
 package com.example.employeetask.service;
 
+import com.example.employeetask.model.Employee;
 import com.example.employeetask.model.Task;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface TaskService {
     void deleteTask(Task task);
 
     Optional<Task> findById(long id);
+
+    List<Employee> getTopFiveEmployees();
 }

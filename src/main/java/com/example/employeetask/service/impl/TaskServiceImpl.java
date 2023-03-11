@@ -1,5 +1,6 @@
 package com.example.employeetask.service.impl;
 
+import com.example.employeetask.model.Employee;
 import com.example.employeetask.model.Task;
 import com.example.employeetask.repository.TaskRepository;
 import com.example.employeetask.service.TaskService;
@@ -39,5 +40,10 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Optional<Task> findById(long id) {
         return taskRepository.findById(id);
+    }
+
+    @Override
+    public List<Employee> getTopFiveEmployees() {
+        return taskRepository.findTopFiveEmployees();
     }
 }

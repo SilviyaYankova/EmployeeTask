@@ -21,7 +21,8 @@ public class Dialog {
 
     Menu mainMenu = new Menu(
             new MenuItem(1, "Employee", () -> new EmployeeDialog(employeeService, taskService).employeeMenu),
-            new MenuItem(2, "Task", () -> new TaskDialog(employeeService, taskService).taskMenu)
+            new MenuItem(2, "Task", () -> new TaskDialog(employeeService, taskService).taskMenu),
+            new MenuItem(3, "Statistics", () -> new StatisticsDialog(employeeService, taskService).statisticsMenu)
     );
 
     public Menu getMainMenu() {
