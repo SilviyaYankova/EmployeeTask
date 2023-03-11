@@ -24,7 +24,7 @@ public class Task {
     @Column
     String description;
     @ManyToOne
-    Employee employee;
+    Employee assignee;
     @Column
     LocalDate dueDate;
 
@@ -34,7 +34,7 @@ public class Task {
                 .add("id=" + id)
                 .add("title='" + title + "'")
                 .add("description='" + description + "'")
-                .add("employee=" + employee)
+                .add("employee=" + assignee)
                 .add("dueDate=" + dueDate)
                 .toString();
     }

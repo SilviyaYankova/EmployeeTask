@@ -50,7 +50,8 @@ public class EmployeeDialog {
 
     private State deleteEmployee(State next) {
         System.out.println("Enter employee id you want to delete:");
-        Employee employee = findEmployeeById();
+        String input = readLn();
+        Employee employee = findEmployeeById(input);
         if (employee != null) {
             Long id = employee.getId();
             employeeService.deleteEmployee(employee);
@@ -71,7 +72,8 @@ public class EmployeeDialog {
     private State updateEmployeeDateOfBirth(State next) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         LocalDate oldDateOfBirth = employee.getDateOfBirth();
-        System.out.println("Update employee's date of birth from \"" + dateTimeFormatter.format(oldDateOfBirth) + "\" to:");
+        System.out.println("Update employee's date of birth from \""
+                                   + dateTimeFormatter.format(oldDateOfBirth) + "\" to:");
         setEmployeeDateOfBirth(employee);
         System.out.println("Old date of birth: " + dateTimeFormatter.format(oldDateOfBirth));
         System.out.println("New date of birth: " + dateTimeFormatter.format(employee.getDateOfBirth()));
@@ -116,14 +118,20 @@ public class EmployeeDialog {
 
     private State updateEmployee(State next) {
         System.out.println("Enter employee id you want to update:");
-        State update = updatingEmployee();
-        if (update != null) return update;
+        String input = readLn();
+        Employee employeeById = findEmployeeById(input);
+        if (employeeById != null) {
+            System.out.println("Choose what to update. When you are finished press \"Save\"");
+            employee = employeeById;
+            return () -> this.updateEmployeeMenu;
+        }
         return next;
     }
 
     private State readAnEmployee(State next) {
         System.out.println("Enter employee id you want to see:");
-        Employee employee = findEmployeeById();
+        String input = readLn();
+        Employee employee = findEmployeeById(input);
         if (employee != null) {
             tableHeader();
             System.out.println(employee);
@@ -202,37 +210,16 @@ public class EmployeeDialog {
         return true;
     }
 
-    private State updatingEmployee() {
-        long id;
-        try {
-            id = Integer.parseInt(readLn());
-            Optional<Employee> byId = employeeService.findById(id);
-            byId.ifPresent(value -> employee = value);
-            if (employee != null) {
-                System.out.println("Choose what to update. When you are finished press \"Save\"");
-                return () -> this.updateEmployeeMenu;
-            } else {
-                System.out.println("Employee with id \"" + id + "\" does not exists.");
-            }
-        } catch (Exception e) {
-            System.out.println("Please, enter a valid number.");
-        }
-        return null;
-    }
-
-    private Employee findEmployeeById() {
-        long id;
+    private Employee findEmployeeById(String input) {
         Employee employee = null;
         try {
-            id = Integer.parseInt(readLn());
-            Optional<Employee> byId = employeeService.findById(id);
-            if (byId.isPresent()) {
-                employee = byId.get();
-            } else {
-                System.out.println("Employee with id \"" + id + "\" does not exists.");
-            }
-        } catch (Exception e) {
+            long id = Integer.parseInt(input);
+            Optional<Employee> byId = Optional.of(employeeService.findById(id).orElseThrow());
+            employee = byId.get();
+        } catch (NumberFormatException e) {
             System.out.println("Please, enter a valid number.");
+        } catch (Exception e) {
+            System.out.println("Employee with id \"" + input + "\" does not exists.");
         }
         return employee;
     }

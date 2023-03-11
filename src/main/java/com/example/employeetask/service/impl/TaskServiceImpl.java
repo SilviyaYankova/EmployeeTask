@@ -17,7 +17,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void createEmployee(Task task) {
+    public void createTask(Task task) {
         taskRepository.save(task);
     }
 

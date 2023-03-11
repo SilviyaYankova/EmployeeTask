@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface TaskService {
 
-    void createEmployee(Task task);
+    void createTask(Task task);
 
     List<Task> getAll();
 
