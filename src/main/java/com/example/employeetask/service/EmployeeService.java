@@ -16,4 +16,6 @@ public interface EmployeeService {
     void deleteEmployee(Employee employee);
 
     Optional<Employee> findById(long id);
+
+    long employeesCount();
 }

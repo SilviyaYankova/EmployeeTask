@@ -2,6 +2,7 @@ package com.example.employeetask.view;
 
 import com.example.employeetask.model.Employee;
 import com.example.employeetask.service.EmployeeService;
+import com.example.employeetask.service.StatusService;
 import com.example.employeetask.service.TaskService;
 
 import java.math.BigDecimal;
@@ -17,11 +18,13 @@ import static com.example.employeetask.view.Menu.SCANNER;
 public class EmployeeDialog {
     private EmployeeService employeeService;
     private TaskService taskService;
+    private StatusService statusService;
     private Employee employee;
 
-    public EmployeeDialog(EmployeeService employeeService, TaskService taskService) {
+    public EmployeeDialog(EmployeeService employeeService, TaskService taskService, StatusService statusService) {
         this.employeeService = employeeService;
         this.taskService = taskService;
+        this.statusService = statusService;
     }
 
     private String readLn() {
@@ -35,7 +38,7 @@ public class EmployeeDialog {
             new MenuItem(3, "Read an employee", () -> this.readAnEmployee(() -> this.employeeMenu)),
             new MenuItem(4, "Update employee", () -> this.updateEmployee(() -> this.employeeMenu)),
             new MenuItem(5, "Delete employee", () -> this.deleteEmployee(() -> this.employeeMenu)),
-            new MenuItem(0, "Back", () -> new Dialog(employeeService, taskService).getMainMenu())
+            new MenuItem(0, "Back", () -> new Dialog(employeeService, taskService, statusService).getMainMenu())
     );
 
     Menu updateEmployeeMenu = new Menu(

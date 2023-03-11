@@ -40,4 +40,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Optional<Employee> findById(long id) {
         return employeeRepository.findById(id);
     }
+
+    @Override
+    public long employeesCount() {
+       return employeeRepository.count();
+    }
 }

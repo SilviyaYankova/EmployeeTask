@@ -1,8 +1,11 @@
 package com.example.employeetask.view;
 
 import com.example.employeetask.model.Employee;
+import com.example.employeetask.model.Status;
+import com.example.employeetask.model.StatusEnum;
 import com.example.employeetask.model.Task;
 import com.example.employeetask.service.EmployeeService;
+import com.example.employeetask.service.StatusService;
 import com.example.employeetask.service.TaskService;
 
 import java.time.LocalDate;
@@ -15,11 +18,13 @@ import static com.example.employeetask.view.Menu.SCANNER;
 public class TaskDialog {
     private EmployeeService employeeService;
     private TaskService taskService;
+    private StatusService statusService;
     private Task task;
 
-    public TaskDialog(EmployeeService employeeService, TaskService taskService) {
+    public TaskDialog(EmployeeService employeeService, TaskService taskService, StatusService statusService) {
         this.employeeService = employeeService;
         this.taskService = taskService;
+        this.statusService = statusService;
     }
 
     private String readLn() {
@@ -32,7 +37,7 @@ public class TaskDialog {
             new MenuItem(3, "Read an task", () -> this.readAnTask(() -> this.taskMenu)),
             new MenuItem(4, "Update task", () -> this.updateTask(() -> this.taskMenu)),
             new MenuItem(5, "Delete task", () -> this.deleteTask(() -> this.taskMenu)),
-            new MenuItem(0, "Back", () -> new Dialog(employeeService, taskService).getMainMenu())
+            new MenuItem(0, "Back", () -> new Dialog(employeeService, taskService, statusService).getMainMenu())
     );
 
     Menu updateTaskMenu = new Menu(
@@ -40,9 +45,14 @@ public class TaskDialog {
             new MenuItem(2, "Description", () -> this.updateTaskDescription(() -> this.updateTaskMenu)),
             new MenuItem(3, "Assignee", () -> this.updateTaskAssignee(() -> this.updateTaskMenu)),
             new MenuItem(4, "Due date", () -> this.updateTaskDueDate(() -> this.updateTaskMenu)),
-            new MenuItem(5, "Save", () -> this.saveUpdatedTask(() -> this.taskMenu)),
+            new MenuItem(5, "Status", () -> this.updateTaskStatus(() -> this.updateTaskMenu)),
+            new MenuItem(6, "Save", () -> this.saveUpdatedTask(() -> this.taskMenu)),
             new MenuItem(0, "Cancel", () -> taskMenu)
     );
+
+    private State updateTaskStatus(State next) {
+        return null;
+    }
 
     private State deleteTask(State next) {
         System.out.println("Enter task id you want to delete:");
@@ -127,7 +137,8 @@ public class TaskDialog {
     }
 
     private State readAllTasks(State next) {
-        List<Task> tasks = taskService.getAll();
+        List<Status> tasks = statusService.getAll();
+//        List<Task> tasks = taskService.getAll();
         if (tasks.size() > 0) {
             tableHeader();
             tasks.forEach(System.out::println);
@@ -162,6 +173,8 @@ public class TaskDialog {
         }
 
         taskService.createTask(task);
+        Status status = new Status(task, StatusEnum.TODO);
+        statusService.createStatus(status);
         return next;
     }
 
@@ -186,12 +199,6 @@ public class TaskDialog {
         task.setDueDate(date);
     }
 
-    private static void tableHeader() {
-        System.out.printf("| %-10s | %-15s | %-15s | %-10s | %-54s |%n",
-                          "id", "title", "dueDate", "assignee", "description");
-        System.out.println("_".repeat(120));
-    }
-
     private Task findTaskById(String input) {
         Task task = null;
         try {
@@ -204,5 +211,11 @@ public class TaskDialog {
             System.out.println("Task with id \"" + input + "\" does not exists.");
         }
         return task;
+    }
+
+    private static void tableHeader() {
+        System.out.printf("| %-10s | %-15s | %-15s | %-10s | %-54s | %-10s |%n",
+                          "Id", "Title", "Due Date", "Assignee", "Description", "Status");
+        System.out.println("_".repeat(133));
     }
 }
