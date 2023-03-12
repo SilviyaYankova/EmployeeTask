@@ -62,10 +62,11 @@ public class TaskDialog {
     private State deleteTask(State next) {
         System.out.println("Enter task id you want to delete:");
         String input = readLn();
-        Task task = findTaskById(input);
-        if (task != null) {
-            Long id = task.getId();
-            taskService.deleteTask(task);
+        Status status = findTaskById(input);
+        if (status != null) {
+            Long id = status.getId();
+            statusService.delete(status);
+            taskService.deleteTask(status.getTask());
             System.out.println("Task with id \"" + id + "\" successfully deleted.");
         }
         return next;
@@ -151,10 +152,11 @@ public class TaskDialog {
     private State updateTask(State next) {
         System.out.println("Enter task id you want to update:");
         String input = readLn();
-        Task taskById = findTaskById(input);
+        Status taskById = findTaskById(input);
         if (taskById != null) {
             System.out.println("Choose what to update. When you are finished press \"Save\"");
-            task = taskById;
+            status = taskById;
+            task = taskById.getTask();
             return () -> this.updateTaskMenu;
         }
         return next;
@@ -163,10 +165,10 @@ public class TaskDialog {
     private State readAnTask(State next) {
         System.out.println("Enter task id you want to see:");
         String input = readLn();
-        Task task = findTaskById(input);
-        if (task != null) {
+        Status taskById = findTaskById(input);
+        if (taskById != null) {
             tableHeader();
-            System.out.println(task);
+            System.out.println(taskById);
         }
         return next;
     }
@@ -233,19 +235,18 @@ public class TaskDialog {
         task.setDueDate(date);
     }
 
-    private Task findTaskById(String input) {
-        Task task = null;
+    private Status findTaskById(String input) {
         try {
             long id = Integer.parseInt(input);
-            Optional<Task> byId = Optional.of(taskService.findById(id).orElseThrow());
-            task = byId.get();
-            status = statusService.findById(id).get();
+            Optional<Status> byId = Optional.of(statusService.findByTaskId(id).orElseThrow());
+            status = byId.get();
+            task = status.getTask();
         } catch (NumberFormatException e) {
             System.out.println("Please, enter a valid number.");
         } catch (Exception e) {
             System.out.println("Task with id \"" + input + "\" does not exists.");
         }
-        return task;
+        return status;
     }
 
     private static void tableHeader() {

@@ -2,7 +2,6 @@ package com.example.employeetask.service;
 
 import com.example.employeetask.model.Status;
 import com.example.employeetask.model.StatusEnum;
-import com.example.employeetask.model.Task;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -13,11 +12,13 @@ public interface StatusService {
 
     List<Status> getAll();
 
-    Optional<Status> findById(Long id);
+    Optional<Status> findByTaskId(Long id);
 
     void update(Status status);
 
     List<Status> findByDueDate(LocalDate date);
 
     List<Status> findByStatus(StatusEnum todo);
+
+    void delete(Status status);
 }

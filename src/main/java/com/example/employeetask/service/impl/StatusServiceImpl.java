@@ -29,8 +29,8 @@ public class StatusServiceImpl implements StatusService {
     }
 
     @Override
-    public Optional<Status> findById(Long id) {
-        return statusRepository.findById(id);
+    public Optional<Status> findByTaskId(Long id) {
+        return statusRepository.findByTask_Id(id);
     }
 
     @Override
@@ -46,6 +46,11 @@ public class StatusServiceImpl implements StatusService {
     @Override
     public List<Status> findByStatus(StatusEnum status) {
         return statusRepository.findAllByStatus(status);
+    }
+
+    @Override
+    public void delete(Status status) {
+        statusRepository.delete(status);
     }
 
 }
