@@ -87,8 +87,8 @@ public class StatisticsDialog {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         try {
             LocalDate date = LocalDate.parse(input, formatter);
-            LocalDate now = LocalDate.now();
-            if (date.isAfter(now)) {
+//            LocalDate now = LocalDate.now();
+//            if (date.isAfter(now)) {
                 List<Status> tasks = statusService.findByDueDate(date);
                 if (!tasks.isEmpty()) {
                     tableHeaderWithStatus();
@@ -96,10 +96,9 @@ public class StatisticsDialog {
                 } else {
                     System.out.println("There is no tasks with due date: \"" + formatter.format(date) + "\"");
                 }
-
-            } else {
-                System.out.println("Due date can not be from the past.");
-            }
+//            } else {
+//                System.out.println("Due date can not be from the past.");
+//            }
         } catch (Exception e) {
             System.out.println("Enter valid date format.");
         }
@@ -180,12 +179,17 @@ public class StatisticsDialog {
 
     private State topFiveEmployees(State next) {
         Map<Employee, Long> map = taskService.topFiveEmployeesCount();
-        tableHeaderEmployeeWithCount();
-        for (Map.Entry<Employee, Long> entry : map.entrySet()) {
-            Employee employee = entry.getKey();
-            Long count = entry.getValue();
-            printEmployeesWithCount(employee, count);
+        if (!map.isEmpty()) {
+            tableHeaderEmployeeWithCount();
+            for (Map.Entry<Employee, Long> entry : map.entrySet()) {
+                Employee employee = entry.getKey();
+                Long count = entry.getValue();
+                printEmployeesWithCount(employee, count);
+            }
+        } else {
+            System.out.println("No employees in the system.");
         }
+
         return next;
     }
 

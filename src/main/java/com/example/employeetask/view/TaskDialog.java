@@ -261,7 +261,7 @@ public class TaskDialog {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         try {
             LocalDate date = LocalDate.parse(input, formatter);
-            LocalDate now = LocalDate.now();
+//            LocalDate now = LocalDate.now();
 //            if (date.isAfter(now)) {
                 task.setDueDate(date);
 //            } else {

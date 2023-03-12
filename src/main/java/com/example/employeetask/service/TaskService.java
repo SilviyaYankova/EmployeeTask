@@ -3,7 +3,6 @@ package com.example.employeetask.service;
 import com.example.employeetask.model.Employee;
 import com.example.employeetask.model.Task;
 
-import java.util.List;
 import java.util.Map;
 
 public interface TaskService {
