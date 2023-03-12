@@ -102,13 +102,42 @@ public class StatisticsDialog {
     }
 
     private State employeesSalaryInRange(State next) {
-        System.out.println("Enter minimum amount");
-        BigDecimal min = new BigDecimal(readLn());
-        System.out.println("Enter maximum amount");
-        BigDecimal max = new BigDecimal(readLn());
-        List<Employee> list = employeeService.findBySalaryInRange(min, max);
-        tableHeaderEmployeeWithCount();
-        list.forEach(System.out::println);
+        BigDecimal minSalary = null;
+        BigDecimal maxSalary = null;
+        int min = 0;
+        int max = 0;
+        while (min == 0) {
+            try {
+                System.out.println("Enter minimum amount");
+                min = Integer.parseInt(readLn());
+                minSalary = new BigDecimal(min);
+                if (minSalary.compareTo(BigDecimal.ZERO) < 0) {
+                    System.out.println("Salary must be a positive number.");
+                    min = 0;
+                }
+            } catch (Exception e) {
+                System.out.println("Please enter a valid number.");
+            }
+        }
+        while (max == 0) {
+            try {
+                System.out.println("Enter maximum amount");
+                max = Integer.parseInt(readLn());
+                maxSalary = new BigDecimal(max);
+                if (maxSalary.compareTo(BigDecimal.ZERO) < 0) {
+                    System.out.println("Salary must be a positive number.");
+                    max = 0;
+                }
+            } catch (Exception e) {
+                System.out.println("Please enter a valid number.");
+            }
+        }
+
+        if (minSalary != null && maxSalary != null) {
+            List<Employee> list = employeeService.findBySalaryInRange(minSalary, maxSalary);
+            tableHeaderEmployeeWithCount();
+            list.forEach(System.out::println);
+        }
         return next;
     }
 
