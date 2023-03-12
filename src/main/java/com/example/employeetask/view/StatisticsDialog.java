@@ -90,13 +90,18 @@ public class StatisticsDialog {
             LocalDate now = LocalDate.now();
             if (date.isAfter(now)) {
                 List<Status> tasks = statusService.findByDueDate(date);
-                tableHeaderWithStatus();
-                tasks.forEach(System.out::println);
+                if (!tasks.isEmpty()) {
+                    tableHeaderWithStatus();
+                    tasks.forEach(System.out::println);
+                } else {
+                    System.out.println("There is no tasks with due date: \"" + formatter.format(date) + "\"");
+                }
+
             } else {
                 System.out.println("Due date can not be from the past.");
             }
         } catch (Exception e) {
-            System.out.println("Invalid date format.");
+            System.out.println("Enter valid date format.");
         }
         return next;
     }
@@ -141,7 +146,7 @@ public class StatisticsDialog {
         if (minSalary != null && maxSalary != null) {
             List<Employee> list = employeeService.findBySalaryInRange(minSalary, maxSalary);
             if (!list.isEmpty()) {
-                tableHeaderEmployeeWithCount();
+                employeeTableHeader();
                 list.forEach(System.out::println);
             } else if (maxSalary.compareTo(minSalary) < 0) {
                 System.out.println("Max salary must be grater than min salary.");
@@ -182,6 +187,12 @@ public class StatisticsDialog {
             printEmployeesWithCount(employee, count);
         }
         return next;
+    }
+
+    private static void employeeTableHeader() {
+        System.out.printf("| %-10s | %-20s | %-20s | %-15s | %-15s | %-10s |%n",
+                          "Id", "Ful lName", "Email", "Phone Number", "Date Of Birth", "Salary");
+        System.out.println("-".repeat(109));
     }
 
     private void printEmployeesWithCount(Employee employee, Long count) {

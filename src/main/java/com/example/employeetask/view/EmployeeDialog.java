@@ -143,7 +143,7 @@ public class EmployeeDialog {
         String input = readLn();
         Employee employee = findEmployeeById(input);
         if (employee != null) {
-            tableHeader();
+            employeeTableHeader();
             System.out.println(employee);
         }
         return next;
@@ -152,7 +152,7 @@ public class EmployeeDialog {
     private State readAllEmployees(State next) {
         List<Employee> employees = employeeService.getAll();
         if (employees.size() > 0) {
-            tableHeader();
+            employeeTableHeader();
             employees.forEach(System.out::println);
             System.out.println("Employees count: " + employeeService.employeesCount());
         } else {
@@ -256,7 +256,7 @@ public class EmployeeDialog {
         return getEmployee(input, employeeService);
     }
 
-    private static void tableHeader() {
+    private static void employeeTableHeader() {
         System.out.printf("| %-10s | %-20s | %-20s | %-15s | %-15s | %-10s |%n",
                           "Id", "Ful lName", "Email", "Phone Number", "Date Of Birth", "Salary");
         System.out.println("-".repeat(109));
