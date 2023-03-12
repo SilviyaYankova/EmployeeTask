@@ -1,5 +1,6 @@
 package com.example.employeetask.service.impl;
 
+import com.example.employeetask.model.Employee;
 import com.example.employeetask.model.Status;
 import com.example.employeetask.model.StatusEnum;
 import com.example.employeetask.repository.StatusRepository;
@@ -51,6 +52,11 @@ public class StatusServiceImpl implements StatusService {
     @Override
     public void delete(Status status) {
         statusRepository.delete(status);
+    }
+
+    @Override
+    public List<Status> findTaskByEmployee(Employee employee) {
+        return statusRepository.findAllByTask_Assignee(employee);
     }
 
 }

@@ -229,6 +229,6 @@ public class EmployeeDialog {
     private static void tableHeader() {
         System.out.printf("| %-10s | %-20s | %-20s | %-15s | %-15s | %-10s |%n",
                           "Id", "Ful lName", "Email", "Phone Number", "Date Of Birth", "Salary");
-        System.out.println("_".repeat(109));
+        System.out.println("-".repeat(109));
     }
 }

@@ -252,6 +252,6 @@ public class TaskDialog {
     private static void tableHeader() {
         System.out.printf("| %-10s | %-15s | %-15s | %-10s | %-54s | %-12s |%n",
                           "Id", "Title", "Due Date", "Assignee", "Description", "Status");
-        System.out.println("_".repeat(135));
+        System.out.println("-".repeat(135));
     }
 }

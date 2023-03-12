@@ -1,5 +1,6 @@
 package com.example.employeetask.service;
 
+import com.example.employeetask.model.Employee;
 import com.example.employeetask.model.Status;
 import com.example.employeetask.model.StatusEnum;
 
@@ -21,4 +22,6 @@ public interface StatusService {
     List<Status> findByStatus(StatusEnum todo);
 
     void delete(Status status);
+
+    List<Status> findTaskByEmployee(Employee employee);
 }

@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.example.employeetask.model.StatusEnum.*;
 import static com.example.employeetask.view.Menu.SCANNER;
@@ -34,9 +35,10 @@ public class StatisticsDialog {
             new MenuItem(1, "Top five employees", () -> this.topFiveEmployees(() -> this.statisticsMenu)),
             new MenuItem(2, "Employees salary in range", () -> this.employeesSalaryInRange(() -> this.statisticsMenu)),
             new MenuItem(3, "Employees count", () -> this.employeesCount(() -> this.statisticsMenu)),
-            new MenuItem(4, "Tasks count", () -> this.tasksCount(() -> this.statisticsMenu)),
+            new MenuItem(4, "Tasks of employee", () -> this.tasksOfEmployee(() -> this.statisticsMenu)),
             new MenuItem(5, "Task by due date", () -> this.taskByDueDate(() -> this.statisticsMenu)),
             new MenuItem(6, "Task by status", () -> this.tasksByStatus(() -> this.statusMenu)),
+            new MenuItem(7, "Tasks count", () -> this.tasksCount(() -> this.statisticsMenu)),
             new MenuItem(0, "Back", () -> new Dialog(employeeService, taskService, statusService).getMainMenu())
     );
 
@@ -107,6 +109,22 @@ public class StatisticsDialog {
         return next;
     }
 
+    private State tasksOfEmployee(State next) {
+        System.out.println("Enter employee id you want to see:");
+        String input = readLn();
+        Employee employee = findEmployeeById(input);
+        if (employee != null) {
+            List<Status> tasks = statusService.findTaskByEmployee(employee);
+            if (tasks.isEmpty()) {
+                System.out.println("Employee with id \"" + employee.getId() + "\" does not have tasks.");
+            } else {
+                tableHeaderWithStatus();
+                tasks.forEach(System.out::println);
+            }
+        }
+        return next;
+    }
+
     private State employeesCount(State next) {
         System.out.println("Count of all Employees: " + employeeService.employeesCount());
         return next;
@@ -133,7 +151,7 @@ public class StatisticsDialog {
     private void tableHeaderEmployeeWithCount() {
         System.out.printf("| %-10s | %-20s | %-20s | %-15s | %-15s | %-10s | %-10s |%n",
                           "Id", "Ful lName", "Email", "Phone Number", "Date Of Birth", "Salary", "Count");
-        System.out.println("_".repeat(122));
+        System.out.println("-".repeat(122));
     }
 
     private void tableHeaderWithStatus() {
@@ -141,4 +159,19 @@ public class StatisticsDialog {
                           "Id", "Title", "Due Date", "Assignee", "Description", "Status");
         System.out.println("-".repeat(135));
     }
+
+    private Employee findEmployeeById(String input) {
+        Employee employee = null;
+        try {
+            long id = Integer.parseInt(input);
+            Optional<Employee> byId = Optional.of(employeeService.findById(id).orElseThrow());
+            employee = byId.get();
+        } catch (NumberFormatException e) {
+            System.out.println("Please, enter a valid number.");
+        } catch (Exception e) {
+            System.out.println("Employee with id \"" + input + "\" does not exists.");
+        }
+        return employee;
+    }
+
 }

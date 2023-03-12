@@ -1,5 +1,6 @@
 package com.example.employeetask.repository;
 
+import com.example.employeetask.model.Employee;
 import com.example.employeetask.model.Status;
 import com.example.employeetask.model.StatusEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,6 @@ public interface StatusRepository extends JpaRepository<Status, Long> {
     List<Status> findAllByStatus(StatusEnum status);
 
     Optional<Status> findByTask_Id(Long id);
+
+    List<Status> findAllByTask_Assignee(Employee employee);
 }
