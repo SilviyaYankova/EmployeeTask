@@ -181,6 +181,7 @@ public class TaskDialog {
         if (tasks.size() > 0) {
             tableHeader();
             tasks.forEach(System.out::println);
+            System.out.println("Tasks count: " + taskService.tasksCount());
         } else {
             System.out.println("There is no task in the system.");
         }

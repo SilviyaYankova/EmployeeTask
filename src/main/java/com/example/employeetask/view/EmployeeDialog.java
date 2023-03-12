@@ -151,6 +151,7 @@ public class EmployeeDialog {
         if (employees.size() > 0) {
             tableHeader();
             employees.forEach(System.out::println);
+            System.out.println("Employees count: " + employeeService.employeesCount());
         } else {
             System.out.println("There is no employees in the system.");
         }
