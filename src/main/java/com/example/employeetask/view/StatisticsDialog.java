@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static com.example.employeetask.model.StatusEnum.*;
 import static com.example.employeetask.view.Menu.SCANNER;
@@ -166,17 +165,6 @@ public class StatisticsDialog {
     }
 
     private Employee findEmployeeById(String input) {
-        Employee employee = null;
-        try {
-            long id = Integer.parseInt(input);
-            Optional<Employee> byId = Optional.of(employeeService.findById(id).orElseThrow());
-            employee = byId.get();
-        } catch (NumberFormatException e) {
-            System.out.println("Please, enter a valid number.");
-        } catch (Exception e) {
-            System.out.println("Employee with id \"" + input + "\" does not exists.");
-        }
-        return employee;
+        return EmployeeDialog.getEmployee(input, employeeService);
     }
-
 }

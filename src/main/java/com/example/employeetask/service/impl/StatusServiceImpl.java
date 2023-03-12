@@ -58,5 +58,4 @@ public class StatusServiceImpl implements StatusService {
     public List<Status> findTaskByEmployee(Employee employee) {
         return statusRepository.findAllByTask_Assignee(employee);
     }
-
 }

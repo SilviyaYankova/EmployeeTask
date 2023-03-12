@@ -234,6 +234,10 @@ public class EmployeeDialog {
     }
 
     private Employee findEmployeeById(String input) {
+        return getEmployee(input, employeeService);
+    }
+
+    public static Employee getEmployee(String input, EmployeeService employeeService) {
         Employee employee = null;
         try {
             long id = Integer.parseInt(input);
