@@ -114,7 +114,7 @@ public class EmployeeDialog {
         String oldName = employee.getFullName();
         String input = readLn();
         setFullName(employee, input);
-        if (!oldName.equals(employee.getFullName())){
+        if (!oldName.equals(employee.getFullName())) {
             System.out.println("Old full name: " + oldName);
             System.out.println("New full name: " + employee.getFullName());
         }
@@ -230,7 +230,12 @@ public class EmployeeDialog {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         try {
             LocalDate date = LocalDate.parse(input, formatter);
-            employee.setDateOfBirth(date);
+            LocalDate before = LocalDate.of(2005, 1, 1);
+            if (date.isBefore(before)) {
+                employee.setDateOfBirth(date);
+            } else {
+                System.out.println("Employee's date of birth can not be after 2005.");
+            }
         } catch (Exception e) {
             System.out.println("Invalid date format.");
         }
