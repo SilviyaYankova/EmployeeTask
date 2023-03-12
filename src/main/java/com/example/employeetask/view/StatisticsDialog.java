@@ -86,10 +86,15 @@ public class StatisticsDialog {
         System.out.println("Enter due date in format \"dd.MM.yyyy\". Example: \"20.03.2023\":");
         String input = readLn();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        LocalDate date = LocalDate.parse(input, formatter);
-        List<Status> tasks = statusService.findByDueDate(date);
-        tableHeaderWithStatus();
-        tasks.forEach(System.out::println);
+        try {
+            LocalDate date = LocalDate.parse(input, formatter);
+            List<Status> tasks = statusService.findByDueDate(date);
+            tableHeaderWithStatus();
+            tasks.forEach(System.out::println);
+        } catch (Exception e) {
+            System.out.println("Invalid date format.");
+        }
+
         return next;
     }
 

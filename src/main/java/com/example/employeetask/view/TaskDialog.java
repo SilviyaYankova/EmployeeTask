@@ -108,8 +108,10 @@ public class TaskDialog {
                                    + dateTimeFormatter.format(oldDueDate) + "\" to:");
         String input = readLn();
         setDueDate(task, input);
-        System.out.println("Old due date: " + dateTimeFormatter.format(oldDueDate));
-        System.out.println("New due date: " + dateTimeFormatter.format(task.getDueDate()));
+        if (!oldDueDate.equals(task.getDueDate())){
+            System.out.println("Old due date: " + dateTimeFormatter.format(oldDueDate));
+            System.out.println("New due date: " + dateTimeFormatter.format(task.getDueDate()));
+        }
         return next;
     }
 
@@ -231,8 +233,12 @@ public class TaskDialog {
 
     private void setDueDate(Task task, String input) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        LocalDate date = LocalDate.parse(input, formatter);
-        task.setDueDate(date);
+        try {
+            LocalDate  date = LocalDate.parse(input, formatter);
+            task.setDueDate(date);
+        } catch (Exception e) {
+            System.out.println("Invalid date format.");
+        }
     }
 
     private Status findTaskById(String input) {

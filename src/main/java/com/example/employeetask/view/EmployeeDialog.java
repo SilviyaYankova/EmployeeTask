@@ -77,8 +77,10 @@ public class EmployeeDialog {
         System.out.println("Update employee's date of birth from \""
                                    + dateTimeFormatter.format(oldDateOfBirth) + "\" to:");
         setEmployeeDateOfBirth(employee);
-        System.out.println("Old date of birth: " + dateTimeFormatter.format(oldDateOfBirth));
-        System.out.println("New date of birth: " + dateTimeFormatter.format(employee.getDateOfBirth()));
+        if (oldDateOfBirth != employee.getDateOfBirth()) {
+            System.out.println("Old date of birth: " + dateTimeFormatter.format(oldDateOfBirth));
+            System.out.println("New date of birth: " + dateTimeFormatter.format(employee.getDateOfBirth()));
+        }
         return next;
     }
 
@@ -197,8 +199,12 @@ public class EmployeeDialog {
         System.out.println("Enter date of birth in format \"dd.MM.yyyy\". Example: \"08.08.1988\":");
         String input = readLn();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        LocalDate date = LocalDate.parse(input, formatter);
-        employee.setDateOfBirth(date);
+        try {
+            LocalDate date = LocalDate.parse(input, formatter);
+            employee.setDateOfBirth(date);
+        } catch (Exception e) {
+            System.out.println("Invalid date format.");
+        }
     }
 
     private static boolean checkIfEmailIsValid(Employee employee, String email) {
