@@ -64,10 +64,12 @@ public class EmployeeDialog {
 
     private State updateEmployeeSalary(State next) {
         System.out.println("Update employee's monthly salary from \"" + employee.getSalary() + "\" to:");
-        String newSalary = readLn();
-        System.out.println("Old monthly salary: " + employee.getSalary());
-        employee.setSalary(new BigDecimal(newSalary));
-        System.out.println("New monthly salary: " + employee.getSalary());
+        BigDecimal oldSalary = employee.getSalary();
+        setSalary(employee);
+        if (!oldSalary.equals(employee.getSalary())) {
+            System.out.println("Old monthly salary: " + oldSalary);
+            System.out.println("New monthly salary: " + employee.getSalary());
+        }
         return next;
     }
 
@@ -178,12 +180,25 @@ public class EmployeeDialog {
         }
 
         while (employee.getSalary() == null) {
-            System.out.println("Enter monthly salary");
-            employee.setSalary(new BigDecimal(readLn()));
+            System.out.println("Enter monthly salary.");
+            setSalary(employee);
         }
 
         employeeService.createEmployee(employee);
         return next;
+    }
+
+    private void setSalary(Employee employee) {
+        try {
+            BigDecimal salary = new BigDecimal(readLn());
+            if (salary.compareTo(BigDecimal.ZERO) > 0) {
+                employee.setSalary(salary);
+            } else {
+                System.out.println("Salary must be a positive number.");
+            }
+        } catch (Exception e) {
+            System.out.println("Please enter a valid number.");
+        }
     }
 
     private void setPhoneNumber(Employee employee) {
