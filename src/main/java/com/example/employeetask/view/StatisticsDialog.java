@@ -87,9 +87,14 @@ public class StatisticsDialog {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         try {
             LocalDate date = LocalDate.parse(input, formatter);
-            List<Status> tasks = statusService.findByDueDate(date);
-            tableHeaderWithStatus();
-            tasks.forEach(System.out::println);
+            LocalDate now = LocalDate.now();
+            if (date.isAfter(now)) {
+                List<Status> tasks = statusService.findByDueDate(date);
+                tableHeaderWithStatus();
+                tasks.forEach(System.out::println);
+            } else {
+                System.out.println("Due date can not be from the past.");
+            }
         } catch (Exception e) {
             System.out.println("Invalid date format.");
         }

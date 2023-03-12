@@ -133,7 +133,7 @@ public class TaskDialog {
         System.out.println("Update task's description from \"" + oldDescription + "\" to:");
         String input = readLn();
         setDescription(task, input);
-        if (!oldDescription.equals(task.getDescription())){
+        if (!oldDescription.equals(task.getDescription())) {
             System.out.println("Old description: " + oldDescription);
             System.out.println("New description: " + task.getDescription());
         }
@@ -261,7 +261,12 @@ public class TaskDialog {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         try {
             LocalDate date = LocalDate.parse(input, formatter);
-            task.setDueDate(date);
+            LocalDate now = LocalDate.now();
+            if (date.isAfter(now)) {
+                task.setDueDate(date);
+            } else {
+                System.out.println("Due date can not be from the past.");
+            }
         } catch (Exception e) {
             System.out.println("Invalid date format.");
         }
