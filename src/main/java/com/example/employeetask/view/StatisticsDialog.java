@@ -35,7 +35,7 @@ public class StatisticsDialog {
             new MenuItem(2, "Employees salary in range", () -> this.employeesSalaryInRange(() -> this.statisticsMenu)),
             new MenuItem(3, "Employees count", () -> this.employeesCount(() -> this.statisticsMenu)),
             new MenuItem(4, "Tasks of employee", () -> this.tasksOfEmployee(() -> this.statisticsMenu)),
-            new MenuItem(5, "Task by due date", () -> this.taskByDueDate(() -> this.statisticsMenu)),
+            new MenuItem(5, "Task by due date", () -> this.tasksByDueDate(() -> this.statisticsMenu)),
             new MenuItem(6, "Task by status", () -> this.tasksByStatus(() -> this.statusMenu)),
             new MenuItem(7, "Tasks count", () -> this.tasksCount(() -> this.statisticsMenu)),
             new MenuItem(0, "Back", () -> new Dialog(employeeService, taskService, statusService).getMainMenu())
@@ -81,7 +81,7 @@ public class StatisticsDialog {
         return next;
     }
 
-    private State taskByDueDate(State next) {
+    private State tasksByDueDate(State next) {
         System.out.println("Enter due date in format \"dd.MM.yyyy\". Example: \"20.03.2023\":");
         String input = readLn();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -93,7 +93,6 @@ public class StatisticsDialog {
         } catch (Exception e) {
             System.out.println("Invalid date format.");
         }
-
         return next;
     }
 
@@ -140,12 +139,12 @@ public class StatisticsDialog {
         for (Map.Entry<Employee, Long> entry : map.entrySet()) {
             Employee employee = entry.getKey();
             Long count = entry.getValue();
-            printEmployees(employee, count);
+            printEmployeesWithCount(employee, count);
         }
         return next;
     }
 
-    private void printEmployees(Employee employee, Long count) {
+    private void printEmployeesWithCount(Employee employee, Long count) {
         System.out.printf("| %-10s | %-20s | %-20s | %-15s | %-15s | %-10s | %-10s |%n",
                           employee.getId(), employee.getFullName(), employee.getEmail(),
                           employee.getPhoneNumber(), employee.getDateOfBirth(),

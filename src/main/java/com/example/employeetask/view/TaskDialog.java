@@ -42,11 +42,11 @@ public class TaskDialog {
     );
 
     Menu updateTaskMenu = new Menu(
-            new MenuItem(1, "Title", () -> this.updateTaskTitle(() -> this.updateTaskMenu)),
-            new MenuItem(2, "Description", () -> this.updateTaskDescription(() -> this.updateTaskMenu)),
-            new MenuItem(3, "Assignee", () -> this.updateTaskAssignee(() -> this.updateTaskMenu)),
-            new MenuItem(4, "Due date", () -> this.updateTaskDueDate(() -> this.updateTaskMenu)),
-            new MenuItem(5, "Status", () -> this.updateTaskStatus(() -> this.updateStatusMenu)),
+            new MenuItem(1, "Title", () -> this.updateTitle(() -> this.updateTaskMenu)),
+            new MenuItem(2, "Description", () -> this.updateDescription(() -> this.updateTaskMenu)),
+            new MenuItem(3, "Assignee", () -> this.updateAssignee(() -> this.updateTaskMenu)),
+            new MenuItem(4, "Due date", () -> this.updateDueDate(() -> this.updateTaskMenu)),
+            new MenuItem(5, "Status", () -> this.updateStatus(() -> this.updateStatusMenu)),
             new MenuItem(6, "Save", () -> this.saveUpdatedTask(() -> this.taskMenu)),
             new MenuItem(0, "Cancel", () -> taskMenu)
     );
@@ -96,16 +96,17 @@ public class TaskDialog {
         return next;
     }
 
-    private State updateTaskStatus(State next) {
+    private State updateStatus(State next) {
         System.out.println("Update task's status from \"" + status.getStatus() + "\" to:");
         return next;
     }
 
-    private State updateTaskDueDate(State next) {
+    private State updateDueDate(State next) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         LocalDate oldDueDate = task.getDueDate();
         System.out.println("Update task's due date from \""
-                                   + dateTimeFormatter.format(oldDueDate) + "\" to:");
+                                   + dateTimeFormatter.format(oldDueDate)
+                                   + "\" to:");
         String input = readLn();
         setDueDate(task, input);
         if (!oldDueDate.equals(task.getDueDate())){
@@ -115,7 +116,7 @@ public class TaskDialog {
         return next;
     }
 
-    private State updateTaskAssignee(State next) {
+    private State updateAssignee(State next) {
         System.out.println("Update task's assignee from \"" + task.getAssignee().getId() + "\" to:");
         String newAssignee = readLn();
         System.out.println("Old assignee id: " + task.getAssignee().getId());
@@ -127,7 +128,7 @@ public class TaskDialog {
         return next;
     }
 
-    private State updateTaskDescription(State next) {
+    private State updateDescription(State next) {
         System.out.println("Update task's description from \"" + task.getDescription() + "\" to:");
         String newDescription = readLn();
         System.out.println("Old description: " + task.getDescription());
@@ -136,7 +137,7 @@ public class TaskDialog {
         return next;
     }
 
-    private State updateTaskTitle(State next) {
+    private State updateTitle(State next) {
         System.out.println("Update task's title from \"" + task.getTitle() + "\" to:");
         String newTitle = readLn();
         System.out.println("Old title: " + task.getTitle());

@@ -40,12 +40,12 @@ public class EmployeeDialog {
             new MenuItem(0, "Back", () -> new Dialog(employeeService, taskService, statusService).getMainMenu())
     );
 
-    Menu updateEmployeeMenu = new Menu(
-            new MenuItem(1, "Full name", () -> this.updateEmployeeName(() -> this.updateEmployeeMenu)),
-            new MenuItem(2, "Email", () -> this.updateEmployeeEmail(() -> this.updateEmployeeMenu)),
-            new MenuItem(3, "Phone number", () -> this.updateEmployeePhoneNumber(() -> this.updateEmployeeMenu)),
-            new MenuItem(4, "Date of birth", () -> this.updateEmployeeDateOfBirth(() -> this.updateEmployeeMenu)),
-            new MenuItem(5, "Salary", () -> this.updateEmployeeSalary(() -> this.updateEmployeeMenu)),
+    Menu updateMenu = new Menu(
+            new MenuItem(1, "Full name", () -> this.updateFullName(() -> this.updateMenu)),
+            new MenuItem(2, "Email", () -> this.updateEmail(() -> this.updateMenu)),
+            new MenuItem(3, "Phone number", () -> this.updatePhoneNumber(() -> this.updateMenu)),
+            new MenuItem(4, "Date of birth", () -> this.updateDateOfBirth(() -> this.updateMenu)),
+            new MenuItem(5, "Salary", () -> this.updateSalary(() -> this.updateMenu)),
             new MenuItem(6, "Save", () -> this.saveUpdatedEmployee(() -> this.employeeMenu)),
             new MenuItem(0, "Cancel", employeeMenu)
     );
@@ -62,7 +62,7 @@ public class EmployeeDialog {
         return next;
     }
 
-    private State updateEmployeeSalary(State next) {
+    private State updateSalary(State next) {
         System.out.println("Update employee's monthly salary from \"" + employee.getSalary() + "\" to:");
         BigDecimal oldSalary = employee.getSalary();
         setSalary(employee);
@@ -73,12 +73,13 @@ public class EmployeeDialog {
         return next;
     }
 
-    private State updateEmployeeDateOfBirth(State next) {
+    private State updateDateOfBirth(State next) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         LocalDate oldDateOfBirth = employee.getDateOfBirth();
         System.out.println("Update employee's date of birth from \""
-                                   + dateTimeFormatter.format(oldDateOfBirth) + "\" to:");
-        setEmployeeDateOfBirth(employee);
+                                   + dateTimeFormatter.format(oldDateOfBirth)
+                                   + "\" to:");
+        setDateOfBirth(employee);
         if (oldDateOfBirth != employee.getDateOfBirth()) {
             System.out.println("Old date of birth: " + dateTimeFormatter.format(oldDateOfBirth));
             System.out.println("New date of birth: " + dateTimeFormatter.format(employee.getDateOfBirth()));
@@ -86,7 +87,7 @@ public class EmployeeDialog {
         return next;
     }
 
-    private State updateEmployeePhoneNumber(State next) {
+    private State updatePhoneNumber(State next) {
         System.out.println("Update employee's phone number from \"" + employee.getPhoneNumber() + "\" to:");
         String oldPhoneNumber = employee.getPhoneNumber();
         setPhoneNumber(employee);
@@ -97,7 +98,7 @@ public class EmployeeDialog {
         return next;
     }
 
-    private State updateEmployeeEmail(State next) {
+    private State updateEmail(State next) {
         System.out.println("Update employee's email from \"" + employee.getEmail() + "\" to:");
         String newEmail = readLn();
         String oldEmail = employee.getEmail();
@@ -108,11 +109,11 @@ public class EmployeeDialog {
         return next;
     }
 
-    private State updateEmployeeName(State next) {
+    private State updateFullName(State next) {
         System.out.println("Update employee's full name from \"" + employee.getFullName() + "\" to:");
-        String newEmail = readLn();
+        String newFullName = readLn();
         System.out.println("Old full name: " + employee.getFullName());
-        employee.setFullName(newEmail);
+        employee.setFullName(newFullName);
         System.out.println("New full name: " + employee.getFullName());
         return next;
     }
@@ -129,7 +130,7 @@ public class EmployeeDialog {
         if (employeeById != null) {
             System.out.println("Choose what to update. When you are finished press \"Save\"");
             employee = employeeById;
-            return () -> this.updateEmployeeMenu;
+            return () -> this.updateMenu;
         }
         return next;
     }
@@ -176,7 +177,7 @@ public class EmployeeDialog {
         }
 
         while (employee.getDateOfBirth() == null) {
-            setEmployeeDateOfBirth(employee);
+            setDateOfBirth(employee);
         }
 
         while (employee.getSalary() == null) {
@@ -210,7 +211,7 @@ public class EmployeeDialog {
         }
     }
 
-    private void setEmployeeDateOfBirth(Employee employee) {
+    private void setDateOfBirth(Employee employee) {
         System.out.println("Enter date of birth in format \"dd.MM.yyyy\". Example: \"08.08.1988\":");
         String input = readLn();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -237,6 +238,12 @@ public class EmployeeDialog {
         return getEmployee(input, employeeService);
     }
 
+    private static void tableHeader() {
+        System.out.printf("| %-10s | %-20s | %-20s | %-15s | %-15s | %-10s |%n",
+                          "Id", "Ful lName", "Email", "Phone Number", "Date Of Birth", "Salary");
+        System.out.println("-".repeat(109));
+    }
+
     public static Employee getEmployee(String input, EmployeeService employeeService) {
         Employee employee = null;
         try {
@@ -249,11 +256,5 @@ public class EmployeeDialog {
             System.out.println("Employee with id \"" + input + "\" does not exists.");
         }
         return employee;
-    }
-
-    private static void tableHeader() {
-        System.out.printf("| %-10s | %-20s | %-20s | %-15s | %-15s | %-10s |%n",
-                          "Id", "Ful lName", "Email", "Phone Number", "Date Of Birth", "Salary");
-        System.out.println("-".repeat(109));
     }
 }
