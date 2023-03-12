@@ -6,6 +6,7 @@ import com.example.employeetask.repository.TaskRepository;
 import com.example.employeetask.service.TaskService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +37,10 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Map<Employee, Long> topFiveEmployeesCount() {
         Map<Employee, Long> map = new LinkedHashMap<>();
-        List<Employee> employees = taskRepository.findTopFiveEmployees();
-        List<Long> tasksCount = taskRepository.findTopFiveEmployeesCount();
+        LocalDate start = LocalDate.now().minusMonths(1);
+        LocalDate end = LocalDate.now();
+        List<Employee> employees = taskRepository.findTopFiveEmployees(start, end);
+        List<Long> tasksCount = taskRepository.findTopFiveEmployeesCount(start, end);
         for (int i = 0; i < employees.size(); i++) {
             map.put(employees.get(i), tasksCount.get(i));
         }

@@ -262,11 +262,11 @@ public class TaskDialog {
         try {
             LocalDate date = LocalDate.parse(input, formatter);
             LocalDate now = LocalDate.now();
-            if (date.isAfter(now)) {
+//            if (date.isAfter(now)) {
                 task.setDueDate(date);
-            } else {
-                System.out.println("Due date can not be from the past.");
-            }
+//            } else {
+//                System.out.println("Due date can not be from the past.");
+//            }
         } catch (Exception e) {
             System.out.println("Invalid date format.");
         }
