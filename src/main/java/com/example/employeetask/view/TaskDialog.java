@@ -179,7 +179,7 @@ public class TaskDialog {
             tableHeader();
             tasks.forEach(System.out::println);
         } else {
-            System.out.println("There is no employees in the system.");
+            System.out.println("There is no task in the system.");
         }
         return next;
     }
@@ -236,17 +236,17 @@ public class TaskDialog {
     }
 
     private Status findTaskById(String input) {
+        Status statusById = null;
         try {
             long id = Integer.parseInt(input);
             Optional<Status> byId = Optional.of(statusService.findByTaskId(id).orElseThrow());
-            status = byId.get();
-            task = status.getTask();
+            statusById = byId.get();
         } catch (NumberFormatException e) {
             System.out.println("Please, enter a valid number.");
         } catch (Exception e) {
             System.out.println("Task with id \"" + input + "\" does not exists.");
         }
-        return status;
+        return statusById;
     }
 
     private static void tableHeader() {

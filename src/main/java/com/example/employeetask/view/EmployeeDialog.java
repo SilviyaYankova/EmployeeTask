@@ -31,7 +31,6 @@ public class EmployeeDialog {
         return SCANNER.nextLine();
     }
 
-
     public Menu employeeMenu = new Menu(
             new MenuItem(1, "Create employee", () -> this.createNewEmployee(() -> this.employeeMenu)),
             new MenuItem(2, "Read all employees", () -> this.readAllEmployees(() -> this.employeeMenu)),
