@@ -144,7 +144,7 @@ public class StatisticsDialog {
                 tableHeaderEmployeeWithCount();
                 list.forEach(System.out::println);
             } else if (maxSalary.compareTo(minSalary) < 0) {
-                System.out.println("Max salary must be grater than in salary.");
+                System.out.println("Max salary must be grater than min salary.");
             } else {
                 System.out.println("There is no salaries min this range.");
             }
