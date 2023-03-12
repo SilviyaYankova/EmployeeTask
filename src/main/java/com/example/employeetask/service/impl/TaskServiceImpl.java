@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -25,11 +24,6 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> getAll() {
-        return taskRepository.findAll();
-    }
-
-    @Override
     public void updateTask(Task taskToUpdate) {
         taskRepository.save(taskToUpdate);
     }
@@ -37,11 +31,6 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void deleteTask(Task task) {
         taskRepository.delete(task);
-    }
-
-    @Override
-    public Optional<Task> findById(long id) {
-        return taskRepository.findById(id);
     }
 
     @Override
