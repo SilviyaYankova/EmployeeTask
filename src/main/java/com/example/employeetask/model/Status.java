@@ -28,7 +28,7 @@ public class Status {
 
     @Override
     public String toString() {
-        return String.format("| %-10s | %-15s | %-15s | %-10s | %-54s | %-12s |",
+        return String.format("| %-10s | %-20s | %-15s | %-10s | %-50s | %-12s |",
                              task.getId(), task.getTitle(), task.getDueDate(),
                              task.getAssignee().getId(), task.getDescription(), getStatus().toString());
     }

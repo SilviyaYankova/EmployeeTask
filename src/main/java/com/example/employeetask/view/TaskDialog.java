@@ -109,7 +109,7 @@ public class TaskDialog {
                                    + "\" to:");
         String input = readLn();
         setDueDate(task, input);
-        if (!oldDueDate.equals(task.getDueDate())){
+        if (!oldDueDate.equals(task.getDueDate())) {
             System.out.println("Old due date: " + dateTimeFormatter.format(oldDueDate));
             System.out.println("New due date: " + dateTimeFormatter.format(task.getDueDate()));
         }
@@ -129,20 +129,26 @@ public class TaskDialog {
     }
 
     private State updateDescription(State next) {
-        System.out.println("Update task's description from \"" + task.getDescription() + "\" to:");
-        String newDescription = readLn();
-        System.out.println("Old description: " + task.getDescription());
-        task.setDescription(newDescription);
-        System.out.println("New description: " + task.getDescription());
+        String oldDescription = task.getDescription();
+        System.out.println("Update task's description from \"" + oldDescription + "\" to:");
+        String input = readLn();
+        setDescription(task, input);
+        if (!oldDescription.equals(task.getDescription())){
+            System.out.println("Old description: " + oldDescription);
+            System.out.println("New description: " + task.getDescription());
+        }
         return next;
     }
 
     private State updateTitle(State next) {
-        System.out.println("Update task's title from \"" + task.getTitle() + "\" to:");
-        String newTitle = readLn();
-        System.out.println("Old title: " + task.getTitle());
-        task.setTitle(newTitle);
-        System.out.println("New title: " + task.getTitle());
+        String oldTitle = task.getTitle();
+        System.out.println("Update task's title from \"" + oldTitle + "\" to:");
+        String input = readLn();
+        setTitle(task, input);
+        if (!oldTitle.equals(task.getTitle())) {
+            System.out.println("Old title: " + oldTitle);
+            System.out.println("New title: " + task.getTitle());
+        }
         return next;
     }
 
@@ -170,7 +176,7 @@ public class TaskDialog {
         String input = readLn();
         Status taskById = findTaskById(input);
         if (taskById != null) {
-            tableHeader();
+            taskTableHeader();
             System.out.println(taskById);
         }
         return next;
@@ -179,7 +185,7 @@ public class TaskDialog {
     private State readAllTasks(State next) {
         List<Status> tasks = statusService.getAll();
         if (tasks.size() > 0) {
-            tableHeader();
+            taskTableHeader();
             tasks.forEach(System.out::println);
             System.out.println("Tasks count: " + taskService.tasksCount());
         } else {
@@ -191,13 +197,15 @@ public class TaskDialog {
     private State createNewTask(State next) {
         Task task = new Task();
         while (task.getTitle() == null) {
-            System.out.println("Enter title:");
-            task.setTitle(readLn());
+            System.out.println("Enter title between 2 and 20 characters:");
+            String input = readLn();
+            setTitle(task, input);
         }
 
         while (task.getDescription() == null) {
-            System.out.println("Enter description:");
-            task.setDescription(readLn());
+            System.out.println("Enter description between 10 and 50 characters:");
+            String input = readLn();
+            setDescription(task, input);
         }
 
         while (task.getAssignee() == null) {
@@ -218,6 +226,22 @@ public class TaskDialog {
         return next;
     }
 
+    private static void setDescription(Task task, String input) {
+        if (input.length() < 10 || input.length() > 50) {
+            System.out.println("Description must be between 2 and 20 characters.");
+        } else {
+            task.setDescription(input);
+        }
+    }
+
+    private static void setTitle(Task task, String input) {
+        if (input.length() < 2 || input.length() > 20) {
+            System.out.println("Title must be between 2 and 20 characters.");
+        } else {
+            task.setTitle(input);
+        }
+    }
+
     private Employee findAssignee(Task task, String inputId) {
         Employee employee = null;
         try {
@@ -236,7 +260,7 @@ public class TaskDialog {
     private void setDueDate(Task task, String input) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         try {
-            LocalDate  date = LocalDate.parse(input, formatter);
+            LocalDate date = LocalDate.parse(input, formatter);
             task.setDueDate(date);
         } catch (Exception e) {
             System.out.println("Invalid date format.");
@@ -257,9 +281,9 @@ public class TaskDialog {
         return statusById;
     }
 
-    private static void tableHeader() {
-        System.out.printf("| %-10s | %-15s | %-15s | %-10s | %-54s | %-12s |%n",
+    private static void taskTableHeader() {
+        System.out.printf("| %-10s | %-20s | %-15s | %-10s | %-50s | %-12s |%n",
                           "Id", "Title", "Due Date", "Assignee", "Description", "Status");
-        System.out.println("-".repeat(135));
+        System.out.println("-".repeat(136));
     }
 }
