@@ -128,7 +128,7 @@ public class EmployeeDialog {
         String input = readLn();
         Employee employeeById = findEmployeeById(input);
         if (employeeById != null) {
-            System.out.println("Choose what to update. When you are finished press \"Save\"");
+            System.out.println("Choose what to update. When you are finished press \"Save\".");
             employee = employeeById;
             return () -> this.updateMenu;
         }

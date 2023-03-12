@@ -108,7 +108,7 @@ public class StatisticsDialog {
         int max = 0;
         while (min == 0) {
             try {
-                System.out.println("Enter minimum amount");
+                System.out.println("Enter minimum amount:");
                 min = Integer.parseInt(readLn());
                 minSalary = new BigDecimal(min);
                 if (minSalary.compareTo(BigDecimal.ZERO) < 0) {
@@ -121,7 +121,7 @@ public class StatisticsDialog {
         }
         while (max == 0) {
             try {
-                System.out.println("Enter maximum amount");
+                System.out.println("Enter maximum amount:");
                 max = Integer.parseInt(readLn());
                 maxSalary = new BigDecimal(max);
                 if (maxSalary.compareTo(BigDecimal.ZERO) < 0) {
@@ -135,8 +135,14 @@ public class StatisticsDialog {
 
         if (minSalary != null && maxSalary != null) {
             List<Employee> list = employeeService.findBySalaryInRange(minSalary, maxSalary);
-            tableHeaderEmployeeWithCount();
-            list.forEach(System.out::println);
+            if (!list.isEmpty()) {
+                tableHeaderEmployeeWithCount();
+                list.forEach(System.out::println);
+            } else if (maxSalary.compareTo(minSalary) < 0) {
+                System.out.println("Max salary must be grater than in salary.");
+            } else {
+                System.out.println("There is no salaries min this range.");
+            }
         }
         return next;
     }

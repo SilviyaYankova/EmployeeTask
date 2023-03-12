@@ -74,25 +74,25 @@ public class TaskDialog {
 
     private State doneStatus(State next) {
         status.setStatus(DONE);
-        System.out.println("Task's status updated to \"Done\"");
+        System.out.println("Task's status updated to \"Done\".");
         return next;
     }
 
     private State reviewStatus(State next) {
         status.setStatus(REVIEW);
-        System.out.println("Task's status updated to \"Review\"");
+        System.out.println("Task's status updated to \"Review\".");
         return next;
     }
 
     private State inProgressStatus(State next) {
         status.setStatus(IN_PROGRESS);
-        System.out.println("Task's status updated to \"In progress\"");
+        System.out.println("Task's status updated to \"In progress\".");
         return next;
     }
 
     private State todoStatus(State next) {
         status.setStatus(TODO);
-        System.out.println("Task's status updated to \"Todo\"");
+        System.out.println("Task's status updated to \"Todo\".");
         return next;
     }
 
