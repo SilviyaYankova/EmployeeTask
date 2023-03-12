@@ -111,10 +111,13 @@ public class EmployeeDialog {
 
     private State updateFullName(State next) {
         System.out.println("Update employee's full name from \"" + employee.getFullName() + "\" to:");
-        String newFullName = readLn();
-        System.out.println("Old full name: " + employee.getFullName());
-        employee.setFullName(newFullName);
-        System.out.println("New full name: " + employee.getFullName());
+        String oldName = employee.getFullName();
+        String input = readLn();
+        setFullName(employee, input);
+        if (!oldName.equals(employee.getFullName())){
+            System.out.println("Old full name: " + oldName);
+            System.out.println("New full name: " + employee.getFullName());
+        }
         return next;
     }
 
@@ -162,8 +165,9 @@ public class EmployeeDialog {
         Employee employee = new Employee();
 
         while (employee.getFullName() == null) {
-            System.out.println("Enter full name:");
-            employee.setFullName(readLn());
+            System.out.println("Enter full name between 2 and 20 characters:");
+            String input = readLn();
+            setFullName(employee, input);
         }
 
         while (employee.getEmail() == null) {
@@ -188,6 +192,14 @@ public class EmployeeDialog {
 
         employeeService.createEmployee(employee);
         return next;
+    }
+
+    private static void setFullName(Employee employee, String input) {
+        if (input.length() < 2 || input.length() > 20) {
+            System.out.println("Full name must be between 2 and 20 characters.");
+        } else {
+            employee.setFullName(input);
+        }
     }
 
     private void setSalary(Employee employee) {
